@@ -1,6 +1,6 @@
 # Student Wellbeing & Stress Monitoring System
 
-A Google Apps Script based web application that assesses student mental wellbeing using self-reported inputs and visual analytics.
+An open-innovation wellbeing tool that assesses student mental wellbeing using self-reported inputs and visual analytics.
 
 ## 🔗 Live Web App
 👉 https://script.google.com/macros/s/AKfycbz4rQ4BuKN-g7xSj0I1HEQmryutvFmCCYjjl4K9Ut-Pp_gUIQ-lTtNo2dbhHYLXw_PI/exec
@@ -27,3 +27,4 @@ This project is deployed as a **Google Apps Script Web App**.
 
 
 Source code is provided for learning and academic use.
+
