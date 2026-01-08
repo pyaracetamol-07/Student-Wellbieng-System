@@ -1,288 +1,427 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base target="_top">
-  <title>Student Wellbeing Report</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <base target="_top">
+    <title>Student Wellbeing Report</title>
 
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      margin: 0;
-      padding: 0;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .container {
-      max-width: 950px;
-      margin: auto;
-      padding: 30px;
-    }
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+        }
 
-    .card {
-      background: white;
-      border-radius: 22px;
-      padding: 35px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    }
+        .container {
+            max-width: 950px;
+            margin: auto;
+            padding: 30px;
+        }
 
-    h1 {
-      text-align: center;
-      font-size: 38px;
-      color: #1e3a8a;
-    }
+        .card {
+            background: white;
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
 
-    .subtitle {
-      text-align: center;
-      font-size: 17px;
-      color: #555;
-      margin-bottom: 30px;
-    }
+        h1 {
+            text-align: center;
+            font-size: 38px;
+            color: #1e3a8a;
+        }
 
-    label {
-      display: block;
-      font-weight: 600;
-      margin-top: 18px;
-    }
+        .subtitle {
+            text-align: center;
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
-    .scale-desc {
-      font-size: 13px;
-      color: #374151;
-      margin: 4px 0 6px 0;
-    }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-top: 18px;
+        }
 
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
+        .scale-desc {
+            font-size: 13px;
+            color: #374151;
+            margin: 4px 0 6px 0;
+        }
 
-    button {
-      width: 100%;
-      padding: 16px;
-      margin-top: 22px;
-      border: none;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(135deg, #6366f1, #3b82f6);
-      cursor: pointer;
-    }
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
 
-    video {
-      width: 100%;
-      border-radius: 16px;
-      margin-top: 20px;
-      border: 2px solid #ddd;
-    }
+        button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 22px;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            cursor: pointer;
+        }
 
-    .report {
-      margin-top: 35px;
-      padding: 45px;
-      border-radius: 22px;
-      text-align: center;
-      color: white;
-      font-size: 22px;
-    }
+        #progressBar {
+            height: 10px;
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
 
-    .report h2 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
+        #progress {
+            height: 10px;
+            width: 0%;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            transition: width 0.5s ease;
+        }
 
-    .percentage {
-      font-size: 52px;
-      font-weight: bold;
-      margin: 15px 0;
-    }
+        .report {
+            margin-top: 35px;
+            padding: 45px;
+            border-radius: 22px;
+            text-align: center;
+            color: white;
+            font-size: 22px;
+        }
 
-    canvas {
-      margin-top: 40px;
-    }
+        .report h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
 
-    .helpline {
-      display: none;
-      margin-top: 30px;
-      padding: 30px;
-      border-radius: 18px;
-      background: #fee2e2;
-      color: #7f1d1d;
-      font-size: 18px;
-    }
-  </style>
+        .percentage {
+            font-size: 52px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        canvas {
+            margin-top: 40px;
+        }
+
+        .helpline {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 18px;
+            background: #fee2e2;
+            color: #7f1d1d;
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="card">
+    <div class="container">
+        <div class="card">
 
-    <h1>🧠 Student Wellbeing Assessment</h1>
-    <div class="subtitle">
-      A private self-check to understand your stress and emotional wellbeing
+            <h1>🧠 Student Wellbeing Assessment</h1>
+            <div class="subtitle">
+                A private self-check to understand your stress and emotional wellbeing
+            </div>
+
+            <div id="progressBar">
+                <div id="progress"></div>
+            </div>
+
+            <div id="formPage">
+
+                <!-- Step 1 -->
+                <div class="step" id="step0">
+                    <label>Student ID</label>
+                    <input id="studentId" placeholder="Enter your Student ID">
+
+                    <label>Do you consent to share this data for wellbeing support?</label>
+                    <select id="consent">
+                        <option value="">-- Select --</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step hidden" id="step1">
+                    <p><b>Rate from 0 (Lowest) to 5 (Highest)</b></p>
+
+                    <label>How often have you felt sad or low in the past week?</label>
+                    <div class="scale-desc">
+                        0 – not at all | 1 – rarely | 2 – sometimes | 3 – often | 4 – very often | 5 – almost always
+                    </div>
+
+                    <select id="sadLow">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step hidden" id="step2">
+                    <label>How stressed do you feel academically right now?</label>
+                    <div class="scale-desc">
+                        0 – no stress | 1 – very low | 2 – manageable | 3 – high | 4 – very high | 5 – overwhelming
+                    </div>
+
+                    <select id="academicStress">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step hidden" id="step3">
+                    <label>On a scale of 0 to 5, how much are you satisfied with your current marks?</label>
+                    <div class="scale-desc">
+                        0 – very satisfied | 1 – satisfied | 2 – somewhat satisfied | 3 – neutral | 4 – dissatisfied | 5 – very dissatisfied
+                    </div>
+
+                    <select id="satisfaction">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step hidden" id="step4">
+                    <label>How often do you feel lonely or isolated?</label>
+                    <div class="scale-desc">
+                        0 – never | 1 – rarely | 2 – sometimes | 3 – often | 4 – very often | 5 – always
+                    </div>
+
+                    <select id="lonely">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="step hidden" id="step5">
+                    <label>How often do you feel emotionally exhausted at the end of the day?</label>
+                    <div class="scale-desc">
+                        0 – not at all | 1 – slightly | 2 – sometimes | 3 – often | 4 – very often | 5 – completely drained
+                    </div>
+
+                    <select id="exhausted">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="step hidden" id="step6">
+                    <label>How hopeful do you feel about the near future?</label>
+                    <div class="scale-desc">
+                        0 – no hope | 1 – very low | 2 – unsure | 3 – somewhat hopeful | 4 – hopeful | 5 – very hopeful
+                    </div>
+
+                    <select id="hopeful">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 8 -->
+                <div class="step hidden" id="step7">
+                    <label>How well have you been sleeping in the past week?</label>
+                    <div class="scale-desc">
+                        0 – not at all | 1 – very poorly | 2 – poorly | 3 – okay | 4 – well | 5 – very well
+                    </div>
+
+                    <select id="sleep">
+                        <option>0</option><option>1</option><option>2</option>
+                        <option>3</option><option>4</option><option>5</option>
+                    </select>
+
+                    <button onclick="prevStep()">⬅️ Back</button>
+                    <button onclick="nextStep()">Next ➡️</button>
+                </div>
+
+                <!-- Step 9 -->
+                <div class="step hidden" id="step8">
+                    <video id="video" autoplay></video>
+
+                    <button onclick="startCamera()">📸 Open Camera & Capture Mood</button>
+                    <button onclick="submitData()">📊 Generate My Full Wellbeing Report</button>
+                    <button onclick="prevStep()">⬅️ Back</button>
+                </div>
+            </div>
+
+            <div id="finalReport"></div>
+
+            <div id="helplineBox" class="helpline">
+                <h2>🚨 You Are Not Alone</h2>
+                <p>If you are feeling overwhelmed or unsafe, please seek immediate help:</p>
+                <ul>
+                    <li><b>KIRAN (India):</b> 1800-599-0019</li>
+                    <li><b>AASRA:</b> +91-9820466726</li>
+                    <li><b>SNEHA:</b> 044-24640050</li>
+                </ul>
+            </div>
+
+            <canvas id="chart"></canvas>
+        </div>
     </div>
 
-    <label>Student ID</label>
-    <input id="studentId" placeholder="Enter your Student ID">
+    <script>
+        let mood = null;
+        let currentStep = 0;
+        const totalSteps = 9;
 
-    <label>Do you consent to share this data for wellbeing support?</label>
-    <select id="consent">
-      <option value="">-- Select --</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
+        function updateProgress() {
+            const percent = Math.round((currentStep / (totalSteps - 1)) * 100);
+            document.getElementById("progress").style.width = percent + "%";
+        }
 
-    <p><b>Rate from 0 (Lowest) to 5 (Highest)</b></p>
+        function showStep(step) {
+            const steps = document.querySelectorAll(".step");
+            steps.forEach(s => s.classList.add("hidden"));
+            steps[step].classList.remove("hidden");
+            currentStep = step;
+            updateProgress();
+        }
 
-    <label>How often have you felt sad or low in the past week?</label>
-    <div class="scale-desc">0 – not at all | 1 – rarely | 2 – sometimes | 3 – often | 4 – very often | 5 – almost always</div>
-    <select id="sadLow">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+        function nextStep() {
+            if (currentStep === 0) {
+                if (!studentId.value) {
+                    alert("Please enter Student ID.");
+                    return;
+                }
+                if (!consent.value) {
+                    alert("Please select consent.");
+                    return;
+                }
+            }
+            if (currentStep < totalSteps - 1) {
+                showStep(currentStep + 1);
+            }
+        }
 
-    <label>How stressed do you feel academically right now?</label>
-    <div class="scale-desc">0 – no stress | 1 – very low | 2 – manageable | 3 – high | 4 – very high | 5 – overwhelming</div>
-    <select id="academicStress">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+        function prevStep() {
+            if (currentStep > 0) {
+                showStep(currentStep - 1);
+            }
+        }
 
-    <!-- NEW Satisfaction Question as 4th -->
-    <label>On a scale of 0 to 5, how much are you satisfied with your current marks?</label>
-    <div class="scale-desc">0 – very satisfied | 1 – satisfied | 2 – somewhat satisfied | 3 – neutral | 4 – dissatisfied | 5 – very dissatisfied</div>
-    <select id="satisfaction">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                    alert("Camera active. Capturing mood…");
 
-    <label>How often do you feel lonely or isolated?</label>
-    <div class="scale-desc">0 – never | 1 – rarely | 2 – sometimes | 3 – often | 4 – very often | 5 – always</div>
-    <select id="lonely">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+                    setTimeout(() => {
+                        mood = Math.floor(Math.random() * 5) + 1;
+                        stream.getTracks().forEach(t => t.stop());
+                        alert("Mood captured successfully.");
+                    }, 1800);
+                })
+                .catch(() => alert("Camera permission denied. Mood will be skipped."));
+        }
 
-    <label>How often do you feel emotionally exhausted at the end of the day?</label>
-    <div class="scale-desc">0 – not at all | 1 – slightly | 2 – sometimes | 3 – often | 4 – very often | 5 – completely drained</div>
-    <select id="exhausted">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+        function submitData() {
+            const data = {
+                studentId: studentId.value,
+                consent: consent.value,
+                sadLow: sadLow.value,
+                academicStress: academicStress.value,
+                satisfaction: satisfaction.value,
+                lonely: lonely.value,
+                exhausted: exhausted.value,
+                hopeful: hopeful.value,
+                sleep: sleep.value,
+                mood: mood
+            };
 
-    <label>How hopeful do you feel about the near future?</label>
-    <div class="scale-desc">0 – no hope | 1 – very low | 2 – unsure | 3 – somewhat hopeful | 4 – hopeful | 5 – very hopeful</div>
-    <select id="hopeful">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+            google.script.run.withSuccessHandler(res => {
+                let bg = "#22c55e",
+                    emoji = "😊";
 
-    <label>How well have you been sleeping in the past week?</label>
-    <div class="scale-desc">0 – not at all | 1 – very poorly | 2 – poorly | 3 – okay | 4 – well | 5 – very well</div>
-    <select id="sleep">
-      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-    </select>
+                helplineBox.style.display = "none";
 
-    <video id="video" autoplay></video>
+                if (res.riskLevel === "Moderate") {
+                    bg = "#f59e0b";
+                    emoji = "😐";
+                }
 
-    <button onclick="startCamera()">📸 Open Camera & Capture Mood</button>
-    <button onclick="submitData()">📊 Generate My Full Wellbeing Report</button>
+                if (res.riskLevel === "High") {
+                    bg = "#dc2626";
+                    emoji = "😟";
+                    helplineBox.style.display = "block";
+                }
 
-    <div id="finalReport"></div>
+                finalReport.innerHTML = `
+                    <div class="report" style="background:${bg}">
+                        <h2>${emoji} ${res.riskLevel} Stress</h2>
+                        <div class="percentage">${res.riskPercentage}%</div>
+                        <p>${res.message}</p>
+                    </div>
+                `;
 
-    <div id="helplineBox" class="helpline">
-      <h2>🚨 You Are Not Alone</h2>
-      <p>If you are feeling overwhelmed or unsafe, please seek immediate help:</p>
-      <ul>
-        <li><b>KIRAN (India):</b> 1800-599-0019</li>
-        <li><b>AASRA:</b> +91-9820466726</li>
-        <li><b>SNEHA:</b> 044-24640050</li>
-      </ul>
-    </div>
+                const colors = [
+                    '#6366f1','#f472b6','#facc15',
+                    '#34d399','#f97316','#60a5fa','#a78bfa'
+                ];
 
-    <canvas id="chart"></canvas>
+                new Chart(chart, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(res.responses),
+                        datasets: [{
+                            data: Object.values(res.responses),
+                            backgroundColor: colors
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { min: 0, max: 5 }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }).saveData(data);
+        }
 
-  </div>
-</div>
-
-<script>
-let mood = 3;
-
-function startCamera() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-      alert("Camera active. Capturing mood…");
-
-      setTimeout(() => {
-        mood = Math.floor(Math.random() * 5) + 1;
-        stream.getTracks().forEach(t => t.stop());
-        alert("Mood captured successfully.");
-      }, 1800);
-    })
-    .catch(() => alert("Camera permission denied."));
-}
-
-function submitData() {
-  if (!studentId.value) {
-    alert("Please enter Student ID.");
-    return;
-  }
-  if (consent.value !== "Yes") {
-    alert("Consent is required.");
-    return;
-  }
-
-  const data = {
-    studentId: studentId.value,
-    consent: consent.value,
-    sadLow: sadLow.value,
-    academicStress: academicStress.value,
-    satisfaction: satisfaction.value,  // NEW
-    lonely: lonely.value,
-    exhausted: exhausted.value,
-    hopeful: hopeful.value,
-    sleep: sleep.value,
-    mood: mood
-  };
-
-  google.script.run.withSuccessHandler(res => {
-    let bg = "#22c55e", emoji = "😊";
-    helplineBox.style.display = "none";
-
-    if (res.riskLevel === "Moderate") {
-      bg = "#f59e0b";
-      emoji = "😐";
-    }
-
-    if (res.riskLevel === "High") {
-      bg = "#dc2626";
-      emoji = "😟";
-      helplineBox.style.display = "block";
-    }
-
-    finalReport.innerHTML = `
-      <div class="report" style="background:${bg}">
-        <h2>${emoji} ${res.riskLevel} Stress</h2>
-        <div class="percentage">${res.riskPercentage}%</div>
-        <p>${res.message}</p>
-      </div>
-    `;
-
-    const colors = ['#6366f1','#f472b6','#facc15','#34d399','#f97316','#60a5fa','#a78bfa'];
-    new Chart(chart, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(res.responses),
-        datasets: [{
-          data: Object.values(res.responses),
-          backgroundColor: colors
-        }]
-      },
-      options: {
-        scales: { y: { min: 0, max: 5 } },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }).saveData(data);
-}
-</script>
+        showStep(0);
+    </script>
 </body>
 </html>
